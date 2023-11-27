@@ -1,13 +1,15 @@
 #!/bin/bash
 # installation of wireguard server and first client config file. must be
-# ran as root
+# ran as root. will install server tools for debian/fedora, and create 1st peer 
+# config file.
 #
 if [ "$EUID" -ne 0 ]
-then echo "Please run as root"
+then echo "Please run as root! "
 exit 1
-else echo "Welcome! Let's get started."
+else echo "Welcome! Let's get started. "
 fi
-echo "To confirm, are you running a Debian/Ubuntu derivitive? Select 'n' if on a Fedora/RHEL based distrobution. (y or n) "
+echo "To confirm, are you running a Debian/Ubuntu derivitive? "
+echo "Select 'n' if on a Fedora/RHEL based distrobution. (y or n) "
 read -r debian
 if [ "${debian}" = "y" ]
 then sudo apt install -y wireguard wireguard-tools
@@ -23,7 +25,7 @@ sudo systemctl start wg-quick@wg0
 echo "Confirmation of WireGuard Interface: "
 sudo wg
 sleep 3
-echo "What is the name of the 1st peer/device that we'll add to the VPN setup?"
+echo "What is the name of the 1st peer/device to be added to this VPN setup? "
 read -r client
 echo "Creating config for ${client}. "
 sleep 1
@@ -35,7 +37,7 @@ wg genpsk > "/etc/wireguard/${client}.psk"
 wg syncconf wg0 <(wg-quick strip wg0)
 { echo "[Interface]" ; echo "Address = 10.100.0.2/32, fd08:4711::2/128" ; echo "DNS = 10.100.0.1" ; echo "PrivateKey = $(cat /etc/wireguard/${client}.key)" ; echo "\n" ; } >> "/etc/wireguard/${client}.conf"
 #
-echo "Installing QRencode. This will grant the ability to scan a QR code for easily importing the config file to ${client}. "
+echo "Installing QRencode. This will grant the ability to scan a QR code for easily importing this config file to ${client}. "
 sleep 3
 if [ "${debian}" = "y" ]
 then sudo apt install -y qrencode
