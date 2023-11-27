@@ -19,7 +19,7 @@ fi
 umask 077
 wg genkey | tee /etc/wireguard/server.key | wg pubkey > /etc/wireguard/server.pub
 touch /etc/wireguard/wg0.conf
-{ echo "[Interface]" ; echo "Address = 10.100.0.1/24, fd08:4711::1/64" ; echo "ListenPort = 47111" ; echo "PrivateKey = $(cat /etc/wireguard/server.key)" ; echo "\n" ; } >> /etc/wireguard/wg0.conf
+{ echo "[Interface]" ; echo "Address = 10.100.0.1/24, fd08:4711::1/64" ; echo "ListenPort = 47111" ; echo "PrivateKey = $(cat /etc/wireguard/server.key)" ; echo ; } >> /etc/wireguard/wg0.conf
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl daemon-reload
 sudo systemctl start wg-quick@wg0
@@ -34,9 +34,9 @@ echo "One moment, please..."
 sleep 2
 wg genkey | tee "/etc/wireguard/${client}.key" | wg pubkey > "/etc/wireguard/${client}.pub"
 wg genpsk > "/etc/wireguard/${client}.psk"
-{ echo "[Peer]" ; echo "PublicKey = $(cat /etc/wireguard/${client}.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}.psk)" ; echo "AllowedIPs = 10.100.0.2/32, fd08:4711::2/128" ; echo "\n" ; } >> /etc/wireguard/wg0.conf
+{ echo "[Peer]" ; echo "PublicKey = $(cat /etc/wireguard/${client}.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}.psk)" ; echo "AllowedIPs = 10.100.0.2/32, fd08:4711::2/128" ; echo ; } >> /etc/wireguard/wg0.conf
 wg syncconf wg0 <(wg-quick strip wg0)
-{ echo "[Interface]" ; echo "Address = 10.100.0.2/32, fd08:4711::2/128" ; echo "DNS = 10.100.0.1" ; echo "PrivateKey = $(cat /etc/wireguard/${client}.key)" ; echo "\n" ; } >> "/etc/wireguard/${client}.conf"
+{ echo "[Interface]" ; echo "Address = 10.100.0.2/32, fd08:4711::2/128" ; echo "DNS = 10.100.0.1" ; echo "PrivateKey = $(cat /etc/wireguard/${client}.key)" ; echo ; } >> "/etc/wireguard/${client}.conf"
 #
 echo "Installing QRencode. This will grant the ability to scan a QR code for easily importing this config file to ${client}. "
 sleep 3
@@ -48,7 +48,7 @@ echo "Please confirm the external IP address, or the domain name for this connec
 read -r conn
 echo "Great! Almost there! "
 #
-{ echo "[Peer]" ; echo "AllowedIPs = 10.100.0.1/32, fd08:4711::1/128" ; echo "Endpoint = ${conn}:47111" ; echo "PersistentKeepalive = 25" ; echo "PublicKey = $(cat /etc/wireguard/server.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}.psk)" ; echo "\n" ; } >> "/etc/wireguard/${client}.conf"
+{ echo "[Peer]" ; echo "AllowedIPs = 10.100.0.1/32, fd08:4711::1/128" ; echo "Endpoint = ${conn}:47111" ; echo "PersistentKeepalive = 25" ; echo "PublicKey = $(cat /etc/wireguard/server.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}.psk)" ; echo ; } >> "/etc/wireguard/${client}.conf"
 #
 echo "Generating QR code: "
 sleep 3
