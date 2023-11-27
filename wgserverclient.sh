@@ -1,7 +1,8 @@
 #!/bin/bash
 # installation of wireguard server and first client config file. must be
-# ran as root. will install server tools for debian/fedora, and create 1st peer 
-# config file.
+# ran as root. the intention is for this to be used for pihole/wg setup, but 
+# could be used in general use case. It will install server tools for 
+# debian/fedora, and create 1st peer config file. 
 #
 if [ "$EUID" -ne 0 ]
 then echo "Please run as root! "
