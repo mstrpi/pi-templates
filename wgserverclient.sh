@@ -39,7 +39,6 @@ wg genpsk > "/etc/wireguard/${client}/${client}.psk"
 { echo "[Peer]" ; echo "PublicKey = $(cat /etc/wireguard/${client}/${client}.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}/${client}.psk)" ; echo "AllowedIPs = 10.100.0.2/32, fd08:4711::2/128" ; echo ; } >> "/etc/wireguard/interfaces/wg0.conf"
 wg syncconf wg0 <(wg-quick strip wg0)
 { echo "[Interface]" ; echo "Address = 10.100.0.2/32, fd08:4711::2/128" ; echo "DNS = 10.100.0.1" ; echo "PrivateKey = $(cat /etc/wireguard/${client}.key)" ; echo ; } >> "/etc/wireguard/${client}/${client}.conf"
-#
 echo "Installing QRencode. This will grant the ability to scan a QR code for easily importing this config file to ${client}. "
 sleep 3
 if [ "${debian}" = "y" ]
@@ -49,9 +48,7 @@ fi
 echo "Please enter the external IP address, or the domain name for this connection: "
 read -r conn
 echo "Great! Almost there! "
-#
 { echo "[Peer]" ; echo "AllowedIPs = 10.100.0.1/32, fd08:4711::1/128" ; echo "Endpoint = ${conn}:47111" ; echo "PersistentKeepalive = 25" ; echo "PublicKey = $(cat /etc/wireguard/server/server.pub)" ; echo "PresharedKey = $(cat /etc/wireguard/${client}/${client}.psk)" ; echo ; } >> "/etc/wireguard/${client}/${client}.conf"
-#
 echo "Generating QR code: "
 sleep 3
 qrencode -t ansiutf8 < "/etc/wireguard/${client}/${client}.conf"
