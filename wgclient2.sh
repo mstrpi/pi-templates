@@ -34,5 +34,6 @@ sudo qrencode -t ansiutf8 < /etc/wireguard/${client}/${client}.conf
 echo -e "Make sure port 47111 on the router/firewall is open, and has been forwarded to this machine\'s "
 echo "internal IP address. The VPN should be up and operational! After importing the above config "
 echo "(potentially via the generated QR code) to ${client}, connection should be successful. "
+wg
 sleep 3
 echo "fin!"
