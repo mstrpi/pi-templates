@@ -21,7 +21,7 @@ umask 077
 mkdir -p /etc/wireguard/server/
 wg genkey | tee /etc/wireguard/server/server.key | wg pubkey > /etc/wireguard/server/server.pub
 touch /etc/wireguard/wg0.conf
-{ echo "[Interface] " ; echo -e "Address = 10.100.0.1/24, fd08:4711::1/64" ; echo "ListenPort = 47111" ; echo "PrivateKey = $(cat /etc/wireguard/server/server.key)" ; echo ; } >> /etc/wireguard/wg0.conf
+{ echo "[Interface] " ; echo "Address = 10.100.0.1/24, fd08:4711::1/64" ; echo "ListenPort = 47111" ; echo "PrivateKey = $(cat /etc/wireguard/server/server.key)" ; echo ; } >> /etc/wireguard/wg0.conf
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl daemon-reload
 sudo systemctl start wg-quick@wg0
